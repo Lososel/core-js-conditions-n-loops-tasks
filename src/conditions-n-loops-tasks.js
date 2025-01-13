@@ -437,8 +437,34 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  if (!matrix || matrix.length === 0 || matrix[0].length === 0) {
+    return matrix;
+  }
+
+  const newMatrix = matrix;
+  const n = newMatrix.length;
+
+  for (let layer = 0; layer < Math.floor(n / 2); layer += 1) {
+    const first = layer;
+    const last = n - 1 - layer;
+
+    for (let i = first; i < last; i += 1) {
+      const offset = i - first;
+
+      const top = newMatrix[first][i];
+
+      newMatrix[first][i] = newMatrix[last - offset][first];
+
+      newMatrix[last - offset][first] = newMatrix[last][last - offset];
+
+      newMatrix[last][last - offset] = newMatrix[i][last];
+
+      newMatrix[i][last] = top;
+    }
+  }
+
+  return newMatrix;
 }
 
 /**
@@ -455,7 +481,7 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
+function sortByAsc(/* inputArray */) {
   throw new Error('Not implemented');
 }
 
@@ -476,8 +502,48 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  if (
+    typeof str !== 'string' ||
+    typeof iterations !== 'number' ||
+    iterations < 0
+  ) {
+    throw new Error('Invalid input');
+  }
+
+  const { length } = str;
+  if (length === 0 || iterations === 0) {
+    return str;
+  }
+
+  let charArray = new Array(length);
+  for (let i = 0; i < length; i += 1) {
+    charArray[i] = str[i];
+  }
+
+  for (let it = 0; it < iterations; it += 1) {
+    let evenIndex = 0;
+    let oddIndex = Math.ceil(length / 2);
+    const tempArray = new Array(length);
+    for (let i = 0; i < length; i += 1) {
+      if (i % 2 === 0) {
+        tempArray[evenIndex] = charArray[i];
+        evenIndex += 1;
+      } else {
+        tempArray[oddIndex] = charArray[i];
+        oddIndex += 1;
+      }
+    }
+
+    charArray = tempArray;
+  }
+
+  let result = '';
+  for (let i = 0; i < length; i += 1) {
+    result += charArray[i];
+  }
+
+  return result;
 }
 
 /**
